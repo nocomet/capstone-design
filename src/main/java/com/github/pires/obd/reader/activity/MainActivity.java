@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
-import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -40,15 +39,27 @@ import com.github.pires.obd.reader.io.LogCSVWriter;
 import com.github.pires.obd.reader.io.MockObdGatewayService;
 import com.github.pires.obd.reader.io.ObdCommandJob;
 import com.github.pires.obd.reader.io.ObdGatewayService;
+import com.github.pires.obd.reader.net.ObdReading;
 import com.github.pires.obd.reader.net.ObdService;
 import com.github.pires.obd.reader.trips.TripLog;
 import com.github.pires.obd.reader.trips.TripRecord;
 import com.google.inject.Inject;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.ConnectionPoolTimeoutException;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.SocketTimeoutException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -122,8 +133,6 @@ public class MainActivity extends RoboActivity implements LocationListener {
 
                     Map<String, String> temp = new HashMap<String, String>();
                     temp.putAll(commandResult);
-
-
 
                     JSONObject obj = new JSONObject(temp);
 
@@ -383,6 +392,9 @@ public class MainActivity extends RoboActivity implements LocationListener {
         // start command execution
         new Handler().post(mQueueCommands);
 
+        if (prefs.getBoolean(ConfigActivity.ENABLE_GPS_KEY, false))
+            gpsStart();
+
         // screen won't turn off until wakeLock.release()
         wakeLock.acquire();
 
@@ -405,6 +417,8 @@ public class MainActivity extends RoboActivity implements LocationListener {
 
     private void stopLiveData() {
         Log.d(TAG, "Stopping live data..");
+
+        gpsStop();
 
         doUnbindService();
         endTrip();
@@ -550,23 +564,19 @@ public class MainActivity extends RoboActivity implements LocationListener {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private boolean gpsInit() {
-        mLocService = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (mLocService != null) {
-            mLocProvider = mLocService.getProvider(LocationManager.GPS_PROVIDER);
-            if (mLocProvider != null) {
-                mLocService.addGpsStatusListener(this);
-                if (mLocService.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    return true;
-                }
-            }
+    private synchronized void gpsStart() {
+        if (!mGpsIsStarted && mLocProvider != null && mLocService != null && mLocService.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            mLocService.requestLocationUpdates(mLocProvider.getName(), getGpsUpdatePeriod(prefs), getGpsDistanceUpdatePeriod(prefs), this);
+            mGpsIsStarted = true;
         }
-        showDialog(NO_GPS_SUPPORT);
-        Log.e(TAG, "Unable to get GPS PROVIDER");
-        // todo disable gps controls into Preferences
-        return false;
     }
 
+    private synchronized void gpsStop() {
+        if (mGpsIsStarted) {
+            mLocService.removeUpdates(this);
+            mGpsIsStarted = false;
+        }
+    }
 
     /**
      * Uploading asynchronous task
