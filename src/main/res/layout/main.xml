@@ -32,7 +32,6 @@
 
                 <TextView
                     android:text="Speed"
-                    android:id="@+id/textView24"
                     style="@style/TitleLabel"/>
 
                 <LinearLayout
@@ -43,13 +42,13 @@
 
                     <TextView
                         android:text="0"
-                        android:id="@+id/speed"
+                        android:id="@+id/velocity"
+                        android:tag="SPEED"
                         style="@style/SmallContentLabel"
                         android:layout_weight="0.7" />
 
                     <TextView
                         android:text="km/h"
-                        android:id="@+id/textView27"
                         style="@style/UnitLabel"
                         android:layout_weight="0.3" />
                 </LinearLayout>
@@ -64,7 +63,6 @@
 
                 <TextView
                     android:text="Coolant"
-                    android:id="@+id/textView22"
                     style="@style/TitleLabel"/>
 
                 <LinearLayout
@@ -76,11 +74,11 @@
                     <TextView
                         android:text="0.0"
                         android:id="@+id/coolant"
+                        android:tag="ENGINE_COOLANT_TEMP"
                         style="@style/SmallContentLabel"/>
 
                     <TextView
                         android:text="C"
-                        android:id="@+id/textView26"
                         style="@style/UnitLabel"/>
                 </LinearLayout>
             </LinearLayout>
@@ -96,7 +94,6 @@
 
                 <TextView
                     android:text="RPM"
-                    android:id="@+id/textView19"
                     style="@style/TitleLabel"/>
 
                 <LinearLayout
@@ -109,11 +106,11 @@
                         android:text="0.0"
                         android:id="@+id/rpm"
                         style="@style/SmallContentLabel"
+                        android:tag="ENGINE_RPM"
                         android:layout_weight="0.7" />
 
                     <TextView
                         android:text="RPM"
-                        android:id="@+id/textView21"
                         style="@style/UnitLabel"
                         android:layout_weight="0.3" />
                 </LinearLayout>
@@ -134,7 +131,6 @@
 
                 <TextView
                     android:text="Status"
-                    android:id="@+id/textView17"
                     style="@style/TitleLabel"/>
 
                 <LinearLayout
@@ -161,7 +157,6 @@
 
                 <TextView
                     android:text="Gear"
-                    android:id="@+id/textView15"
                     style="@style/TitleLabel"/>
 
                 <LinearLayout
@@ -188,7 +183,6 @@
 
                 <TextView
                     android:text="Battery"
-                    android:id="@+id/textView12"
                     style="@style/TitleLabel"/>
 
                 <LinearLayout
@@ -204,7 +198,6 @@
 
                     <TextView
                         android:text="V"
-                        android:id="@+id/textView14"
                         style="@style/UnitLabel" />
 
                 </LinearLayout>
@@ -225,7 +218,6 @@
 
                 <TextView
                     android:text="Total consume"
-                    android:id="@+id/textView6"
                     style="@style/TitleLabel" />
 
                 <TextView
@@ -244,8 +236,7 @@
 
                 <TextView
                     style="@style/TitleLabel"
-                    android:text="Fuel Efficiency"
-                    android:id="@+id/textView8" />
+                    android:text="Fuel Efficiency" />
 
                 <LinearLayout
                     android:orientation="horizontal"
@@ -254,12 +245,12 @@
 
                     <TextView
                         android:text="0"
-                        android:id="@+id/fuelEfficiency"
+                        android:id="@+id/fuel_efficiency"
+                        android:tag="FUEL_CONSUMPTION_RATE"
                         style="@style/ContentLabel"/>
 
                     <TextView
                         android:text="km/l"
-                        android:id="@+id/textView10"
                         style="@style/UnitLabel" />
                 </LinearLayout>
             </LinearLayout>
@@ -280,7 +271,6 @@
 
                 <TextView
                     android:text="Engine Oil"
-                    android:id="@+id/textView"
                     style="@style/TitleLabel"/>
 
                 <LinearLayout
@@ -290,14 +280,14 @@
 
                     <TextView
                         android:text="0.0"
-                        android:id="@+id/EngineOil"
+                        android:id="@+id/Engine_oil"
                         style="@style/ContentLabel"
+                        android:tag="ENGINE_OIL_TEMP"
                         android:gravity="center_vertical|end"
                         android:layout_weight="0.8" />
 
                     <TextView
                         android:text="C"
-                        android:id="@+id/textView11"
                         style="@style/UnitLabel"
                         android:layout_weight="0.1" />
                 </LinearLayout>
@@ -313,7 +303,6 @@
 
                 <TextView
                     android:text="Oil Expenses"
-                    android:id="@+id/textView2"
                     style="@style/TitleLabel" />
 
                 <LinearLayout
@@ -328,7 +317,6 @@
 
                     <TextView
                         android:text="km/h"
-                        android:id="@+id/textView4"
                         style="@style/UnitLabel"/>
                 </LinearLayout>
 
@@ -350,7 +338,6 @@
 
                 <TextView
                     android:text="Driving Mileage"
-                    android:id="@+id/textView28"
                     style="@style/TitleLabel"/>
 
                 <LinearLayout
@@ -361,13 +348,13 @@
                     <TextView
 
                         android:text="0.0"
-                        android:id="@+id/drivingMileage"
+                        android:id="@+id/mileage"
                         style="@style/ContentLabel"
+                        android:tag="ENGINE_RUNTIME"
                         android:layout_weight="0.8" />
 
                     <TextView
                         android:text="km"
-                        android:id="@+id/textView31"
                         style="@style/UnitLabel"
                         android:layout_weight="0.1" />
                 </LinearLayout>
@@ -383,7 +370,6 @@
 
                 <TextView
                     android:text="Driving Time"
-                    android:id="@+id/textView30"
                     style="@style/TitleLabel" />
 
                 <LinearLayout
@@ -392,13 +378,22 @@
                     android:layout_height="fill_parent" >
 
                     <TextView
-                        android:text="0.0"
-                        android:id="@+id/drivingTime"
+                        android:text="0"
+                        android:id="@+id/hour"
+                        android:tag="ENGINE_RUNTIME"
                         style="@style/ContentLabel" />
 
                     <TextView
-                        android:text="km/h"
-                        android:id="@+id/textView32"
+                        android:text="h"
+                        style="@style/UnitLabel" />
+
+                    <TextView
+                        android:text="0"
+                        android:id="@+id/minute"
+                        style="@style/ContentLabel" />
+
+                    <TextView
+                        android:text="m"
                         style="@style/UnitLabel" />
                 </LinearLayout>
             </LinearLayout>
@@ -415,13 +410,14 @@
                 <LinearLayout
                     style="@style/listContainer">
                         <TextView
-                        android:text="Vehicle ID"
-                        style="@style/TitleForList"/>
+                            android:text="Vehicle ID"
+                            style="@style/TitleForList"/>
 
                         <TextView
-                        android:text="NULL"
-                        android:id="@+id/vehicleID"
-                        style="@style/ContentForList"/>
+                            android:text="NULL"
+                            android:id="@+id/vehicleID"
+                            android:tag="VIN"
+                            style="@style/ContentForList"/>
                 </LinearLayout>
 
             <LinearLayout
@@ -444,6 +440,7 @@
                 <TextView
                     android:text="0.0"
                     android:id="@+id/engineLoad"
+                    android:tag="ENGINE_LOAD"
                     style="@style/ContentForList"/>
             </LinearLayout>
         </LinearLayout>
